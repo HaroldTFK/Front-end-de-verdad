@@ -1,0 +1,482 @@
+@import "tailwindcss";
+
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+/* =========================================
+   Colores del panel (verde SENA)
+   ========================================= */
+:root {
+    --verde: #39a900;
+    --verde-oscuro: #2b8000;
+    --bosque: #17330f;
+    --hoja: #eaf4e2;
+    --papel: #f4f6f1;
+    --tinta: #1c261b;
+    --gris: #5f6b5c;
+    --linea: #dde3d8;
+    --rojo: #b42318;
+}
+
+body {
+    margin: 0;
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* =========================================
+   Menú lateral
+   ========================================= */
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 50;
+    width: 16rem;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #17330f 0%, #10270b 100%);
+    color: #fff;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+}
+
+.sidebar.abierto { transform: translateX(0); }
+
+.sidebar-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1rem 1rem 1.25rem;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.logo-marca {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.6rem;
+    background: var(--verde);
+    font-weight: 700;
+}
+
+.logo-texto { display: grid; gap: 0.15rem; }
+.logo-texto strong { font-size: 1rem; letter-spacing: -0.02em; }
+.logo-texto small { color: #9fb897; font-size: 0.65rem; font-weight: 500; }
+
+.cerrar-menu {
+    display: none;
+    padding: 0.35rem;
+    border: 0;
+    border-radius: 0.45rem;
+    background: transparent;
+    color: #9fb897;
+    cursor: pointer;
+}
+
+.cerrar-menu:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.cerrar-menu svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 1.8; }
+
+.menu { flex: 1; padding: 1.25rem 0.75rem; }
+.menu-titulo {
+    display: block;
+    padding: 0 0.9rem 0.6rem;
+    color: #78906f;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 0.35rem;
+    border-radius: 0.5rem;
+    color: #cfe0c8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.menu a svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    flex: 0 0 auto;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+}
+
+.menu a:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+
+.menu a.activo {
+    background: var(--verde);
+    color: #fff;
+    box-shadow: 0 0.4rem 1rem rgba(57, 169, 0, 0.18);
+}
+
+.usuario {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0 0.75rem 1rem;
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 0.8rem;
+}
+
+.usuario-avatar {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 2.15rem;
+    height: 2.15rem;
+    flex: 0 0 auto;
+    border-radius: 0.6rem;
+    background: #d7edcc;
+    color: var(--verde-oscuro);
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.usuario-avatar span {
+    position: absolute;
+    right: -0.1rem;
+    bottom: -0.1rem;
+    width: 0.45rem;
+    height: 0.45rem;
+    border: 2px solid #17330f;
+    border-radius: 50%;
+    background: #72d34d;
+}
+
+.usuario-info { min-width: 0; flex: 1; }
+.usuario-info strong,
+.usuario-info small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.usuario-info strong { color: #fff; font-size: 0.75rem; }
+.usuario-info small { margin-top: 0.15rem; color: #9fb897; font-size: 0.68rem; }
+.usuario-menu { color: #9fb897; letter-spacing: 0.08em; }
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(16, 39, 11, 0.45);
+}
+
+.sidebar-backdrop.visible { display: block; }
+
+/* Barra superior (solo en celular) */
+.barra-movil {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border-bottom: 1px solid var(--linea);
+}
+
+.barra-movil button {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--linea);
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.barra-movil button:hover { border-color: var(--verde); color: var(--verde-oscuro); }
+.barra-movil button svg { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 1.8; }
+.barra-movil strong,
+.barra-movil small { display: block; }
+.barra-movil strong { font-size: 0.85rem; }
+.barra-movil small { margin-top: 0.1rem; color: var(--gris); font-size: 0.65rem; }
+
+.contenido {
+    padding: 1.5rem 1rem 3rem;
+    max-width: 72rem;
+}
+
+@media (min-width: 768px) {
+    .sidebar { transform: translateX(0); }
+    .sidebar-backdrop { display: none !important; }
+    .barra-movil { display: none; }
+    .contenido { margin-left: 16rem; padding: 2.5rem 2.5rem 3rem; }
+}
+
+@media (max-width: 767px) {
+    .cerrar-menu { display: block; }
+}
+
+/* =========================================
+   Encabezado de cada página
+   ========================================= */
+.encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.encabezado h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.encabezado p { margin: 0.25rem 0 0; color: var(--gris); font-size: 0.95rem; }
+
+.volver {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    color: var(--gris);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.volver:hover { color: var(--verde-oscuro); }
+
+/* =========================================
+   Tarjetas, tablas y botones
+   ========================================= */
+.panel {
+    background: #fff;
+    border: 1px solid var(--linea);
+    border-radius: 0.9rem;
+    overflow: hidden;
+}
+
+.panel-cuerpo { padding: 1.5rem; }
+
+.tabla-scroll { overflow-x: auto; }
+
+.tabla { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+.tabla th {
+    padding: 0.8rem 1.25rem;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gris);
+    background: #fafbf8;
+    border-bottom: 1px solid var(--linea);
+    white-space: nowrap;
+}
+
+.tabla td {
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--linea);
+    vertical-align: middle;
+}
+
+.tabla tr:last-child td { border-bottom: 0; }
+.tabla tbody tr:hover { background: #fbfcf9; }
+
+.vacio { padding: 3rem 1rem; text-align: center; color: var(--gris); }
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-verde { background: var(--verde); color: #fff; }
+.btn-verde:hover { background: var(--verde-oscuro); }
+
+.btn-borde { background: #fff; color: var(--tinta); border-color: var(--linea); }
+.btn-borde:hover { border-color: var(--verde); color: var(--verde-oscuro); }
+
+.acciones { display: flex; gap: 0.25rem; justify-content: flex-end; white-space: nowrap; }
+
+.accion {
+    padding: 0.35rem 0.6rem;
+    border: 0;
+    border-radius: 0.4rem;
+    background: none;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--gris);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.accion:hover { background: var(--hoja); color: var(--verde-oscuro); }
+.accion-borrar:hover { background: #fdecea; color: var(--rojo); }
+
+.btn:focus-visible,
+.accion:focus-visible,
+.menu a:focus-visible,
+.campo:focus-visible {
+    outline: 3px solid rgba(57, 169, 0, 0.35);
+    outline-offset: 2px;
+}
+
+/* Etiquetas pequeñas (módulo, código) */
+.etiqueta {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: var(--hoja);
+    color: var(--verde-oscuro);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.etiqueta-gris { background: #eef0ec; color: var(--gris); }
+
+/* Foto o iniciales de la persona */
+.persona { display: flex; align-items: center; gap: 0.8rem; }
+.persona strong { display: block; font-weight: 600; }
+.persona small { color: var(--gris); }
+
+.avatar {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    display: grid;
+    place-items: center;
+    background: var(--hoja);
+    color: var(--verde-oscuro);
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--hoja);
+}
+
+.avatar-grande { width: 7rem; height: 7rem; font-size: 2rem; }
+
+/* =========================================
+   Formularios
+   ========================================= */
+.formulario { display: grid; gap: 1.25rem; }
+
+@media (min-width: 640px) {
+    .formulario { grid-template-columns: 1fr 1fr; }
+    .completo { grid-column: 1 / -1; }
+}
+
+.formulario label,
+.titulo-campo {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.campo {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--linea);
+    border-radius: 0.5rem;
+    background: #fff;
+    font: inherit;
+    font-size: 0.92rem;
+    color: var(--tinta);
+}
+
+.campo:focus { border-color: var(--verde); outline: none; box-shadow: 0 0 0 3px rgba(57, 169, 0, 0.15); }
+
+.error-campo { margin-top: 0.3rem; color: var(--rojo); font-size: 0.8rem; }
+
+.opciones { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.opciones label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--linea);
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.opciones input { accent-color: var(--verde); }
+
+.foto-actual { display: flex; align-items: center; gap: 1rem; }
+
+.botones-form {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--linea);
+}
+
+/* =========================================
+   Mensajes
+   ========================================= */
+.alerta {
+    margin-bottom: 1.25rem;
+    padding: 0.8rem 1rem;
+    border-radius: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.alerta-ok { background: var(--hoja); color: var(--verde-oscuro); border: 1px solid #cfe5c0; }
+.alerta-error { background: #fdecea; color: var(--rojo); border: 1px solid #f6c7c1; }
+
+/* =========================================
+   Detalle e inicio
+   ========================================= */
+.datos { display: grid; gap: 1rem; margin: 0; }
+
+@media (min-width: 640px) { .datos { grid-template-columns: 1fr 1fr; } }
+
+.datos dt { font-size: 0.8rem; color: var(--gris); }
+.datos dd { margin: 0.2rem 0 0; font-size: 1.05rem; font-weight: 600; }
+
+.perfil { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+
+.resumen { display: grid; gap: 1rem; margin-bottom: 2rem; }
+
+@media (min-width: 640px) { .resumen { grid-template-columns: repeat(3, 1fr); } }
+
+.resumen a {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    background: #fff;
+    border: 1px solid var(--linea);
+    border-radius: 0.9rem;
+    color: var(--tinta);
+    text-decoration: none;
+}
+
+.resumen a:hover { border-color: var(--verde); }
+.resumen b { display: block; font-size: 2.25rem; font-weight: 600; color: var(--verde-oscuro); }
+.resumen span { color: var(--gris); font-size: 0.9rem; }
